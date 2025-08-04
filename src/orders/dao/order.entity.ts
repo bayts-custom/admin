@@ -1,4 +1,6 @@
 import { BossEntity } from 'src/bosses/dao/boss.entity';
+import { CarMarkEntity } from 'src/cars/dao/car-mark.entity';
+import { CarModelEntity } from 'src/cars/dao/car-model.entity';
 import {
     Column,
     CreateDateColumn,
@@ -20,9 +22,6 @@ export class OrderEntity {
 
     @UpdateDateColumn()
     public updatedAt: Date;
-
-    @Column({ type: 'varchar' })
-    public car: string;
 
     @Column({
         type: 'varchar',
@@ -72,4 +71,24 @@ export class OrderEntity {
 
     @RelationId<OrderEntity>(({ boss }) => boss)
     public bossId?: string;
+
+    @ManyToOne(() => CarMarkEntity)
+    @JoinColumn({
+        name: 'car_mark_id',
+        referencedColumnName: 'id',
+    })
+    public carMark: CarMarkEntity;
+
+    @RelationId<OrderEntity>(({ carMark }) => carMark)
+    public carMarkId: string;
+
+    @ManyToOne(() => CarModelEntity)
+    @JoinColumn({
+        name: 'car_model_id',
+        referencedColumnName: 'id',
+    })
+    public carModel: CarModelEntity;
+
+    @RelationId<OrderEntity>(({ carModel }) => carModel)
+    public carModelId: string;
 }

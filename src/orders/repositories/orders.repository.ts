@@ -21,6 +21,8 @@ export class OrdersRepository {
             where: { id },
             relations: {
                 boss: true,
+                carModel: true,
+                carMark: true,
             },
         });
     }
@@ -39,6 +41,8 @@ export class OrdersRepository {
             ],
             relations: {
                 boss: true,
+                carModel: true,
+                carMark: true,
             },
         });
     }

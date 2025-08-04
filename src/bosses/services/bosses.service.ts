@@ -8,14 +8,18 @@ import { SaveBossDto } from '../dto/save-boss.dto';
 export class BossesService {
     constructor(private readonly bossesRepository: BossesRepository) {}
 
-    public async get(id: string): Promise<BossEntity> {
-        const pet = await this.bossesRepository.get(id);
+    public async get(id: string, withRelations: boolean = true): Promise<BossEntity> {
+        const boss = await this.bossesRepository.get(id, withRelations);
 
-        if (!pet) {
+        if (!boss) {
             throw new NotFoundException('Boss not found.');
         }
 
-        return pet;
+        return boss;
+    }
+
+    public async getByName(name: string): Promise<BossEntity | null> {
+        return this.bossesRepository.getByName(name);
     }
 
     public async getList(): Promise<BossEntity[]> {

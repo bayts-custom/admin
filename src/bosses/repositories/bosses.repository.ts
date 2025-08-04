@@ -11,12 +11,18 @@ export class BossesRepository {
         private readonly repository: Repository<BossEntity>,
     ) {}
 
-    public get(id: string): Promise<BossEntity | null> {
+    public get(id: string, withRelations: boolean = true): Promise<BossEntity | null> {
         return this.repository.findOne({
             where: { id },
-            relations: {
+            relations: withRelations ? {
                 orders: true,
-            },
+            } : undefined,
+        });
+    }
+
+    public getByName(name: string): Promise<BossEntity | null> {
+        return this.repository.findOne({
+            where: { name },
         });
     }
 

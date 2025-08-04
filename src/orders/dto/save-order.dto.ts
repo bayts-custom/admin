@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsDateString, IsDefined, IsNumber, IsOptional, IsString, IsUUID, ValidateIf } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { AsDate } from 'src/_decorators/as-date.transformer';
 
 export class SaveOrderDto {
@@ -10,17 +10,16 @@ export class SaveOrderDto {
 
     @Expose()
     @IsOptional()
-    @IsUUID()
-    public bossId?: string;
-
-    @Expose()
-    @IsOptional()
     @IsString()
     public bossName?: string;
 
     @Expose()
-    @IsString()
-    public car: string;
+    @IsUUID()
+    public carMarkId: string;
+
+    @Expose()
+    @IsUUID()
+    public carModelId: string;
 
     @Expose()
     @IsOptional()
@@ -53,8 +52,4 @@ export class SaveOrderDto {
     @AsDate()
     @IsDateString()
     public dateTo?: string;
-
-    @ValidateIf((obj: SaveOrderDto) => (!obj.bossId && !obj.bossName) || (!!obj.bossId && !!obj.bossName))
-    @IsDefined({ message: 'Boss is invalid' })
-    public bossValidaton?: undefined;
 }
