@@ -15,7 +15,7 @@ async function bootstrap() {
 
     app.enableCors({
         // origin: 'http://localhost:3000',
-        origin: 'https://bayts-custom.github.io/admin-front/*',
+        origin: 'https://bayts-custom.github.io/*',
     });
 
     await app.listen(envConfig.server.port);
