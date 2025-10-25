@@ -1,6 +1,7 @@
 import { BossEntity } from 'src/bosses/dao/boss.entity';
 import { CarMarkEntity } from 'src/cars/dao/car-mark.entity';
 import { CarModelEntity } from 'src/cars/dao/car-model.entity';
+import { FilmEntity } from 'src/films/dao/film.entity';
 import {
     Column,
     CreateDateColumn,
@@ -11,6 +12,8 @@ import {
     RelationId,
     UpdateDateColumn,
 } from 'typeorm';
+import { WorkType } from '../enums/work-type.enum';
+import { Details } from '../enums/details.enum';
 
 @Entity('orders')
 export class OrderEntity {
@@ -37,10 +40,18 @@ export class OrderEntity {
     public fullPrice?: number;
 
     @Column({
+        name: 'film_price',
         type: 'int',
         nullable: true,
     })
-    public earn?: number;
+    public filmPrice?: number;
+
+    @Column({
+        name: 'place_price',
+        type: 'int',
+        nullable: true,
+    })
+    public placePrice?: number;
 
     @Column({
         type: 'int',
@@ -62,7 +73,53 @@ export class OrderEntity {
     })
     public dateTo?: Date;
 
-    @ManyToOne(() => BossEntity)
+    @Column({
+        name: 'work_type',
+        type: 'enum',
+        enum: WorkType,
+        nullable: true,
+    })
+    public workType?: WorkType;
+
+    @Column({
+        type: 'jsonb',
+        nullable: true,
+    })
+    public details?: Details[];
+
+    @Column({
+        name: 'film_length',
+        type: 'int',
+        nullable: true,
+    })
+    public filmLength?: number;
+
+    @Column({
+        type: 'int',
+        nullable: true,
+    })
+    public complicity?: number;
+
+    @Column({
+        type: 'boolean',
+        nullable: true,
+    })
+    public review?: boolean;
+
+    @ManyToOne(() => FilmEntity)
+    @JoinColumn({
+        name: 'film_id',
+        referencedColumnName: 'id',
+    })
+    public film?: FilmEntity;
+
+    @RelationId<OrderEntity>(({ film }) => film)
+    public filmId?: string;
+
+    @ManyToOne(() => BossEntity, {
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+    })
     @JoinColumn({
         name: 'boss_id',
         referencedColumnName: 'id',

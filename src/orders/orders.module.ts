@@ -7,9 +7,10 @@ import { OrdersService } from './services/orders.service';
 import { OrdersController } from './orders.controller';
 import { BossesModule } from 'src/bosses/bosses.module';
 import { CarsModule } from 'src/cars/cars.module';
+import { FilmsModule } from 'src/films/films.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([OrderEntity]), BossesModule, CarsModule],
+    imports: [TypeOrmModule.forFeature([OrderEntity]), BossesModule, CarsModule, FilmsModule],
     controllers: [OrdersController],
     providers: [OrdersRepository, OrdersService],
 })

@@ -4,6 +4,7 @@ export class PopulateModels1754133772719 implements MigrationInterface {
     name = 'PopulateModels1754133772719';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const fs = require('fs');
         const models = fs.readFileSync('models.txt', 'utf-8');
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { BossEntity } from '../dao/boss.entity';
 
@@ -14,9 +14,11 @@ export class BossesRepository {
     public get(id: string, withRelations: boolean = true): Promise<BossEntity | null> {
         return this.repository.findOne({
             where: { id },
-            relations: withRelations ? {
-                orders: true,
-            } : undefined,
+            relations: withRelations
+                ? {
+                      orders: true,
+                  }
+                : undefined,
         });
     }
 

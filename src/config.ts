@@ -2,7 +2,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-// eslint-disable-next-line jest/require-hook
 dotenv.config();
 
 const getEnvValue = (envKey: string, defaultValue?: string) => {
@@ -11,7 +10,7 @@ const getEnvValue = (envKey: string, defaultValue?: string) => {
         throw new Error(`Environment key ${envKey} is undefined.`);
     }
     return envValue ?? String(defaultValue);
-}
+};
 
 export const envConfig = {
     server: {
@@ -42,4 +41,3 @@ export const typeORMConfig: TypeOrmModuleOptions = {
     synchronize: false,
     namingStrategy: new SnakeNamingStrategy(),
 };
-

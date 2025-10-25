@@ -18,9 +18,6 @@ export class CarMarksRepository {
     public get(id: string): Promise<CarMarkEntity | null> {
         return this.repository.findOne({
             where: { id },
-            relations: {
-                models: true,
-            },
         });
     }
 
@@ -28,11 +25,11 @@ export class CarMarksRepository {
         return this.repository.find({
             where: [
                 {
-                    popular: typeof filter.popular === 'boolean' ? filter.popular : undefined,
+                    popular: filter.popular || undefined,
                     name: filter.search ? ILike(`%${filter.search.trim()}%`) : undefined,
                 },
                 {
-                    popular: typeof filter.popular === 'boolean' ? filter.popular : undefined,
+                    popular: filter.popular || undefined,
                     rusName: filter.search ? ILike(`%${filter.search.trim()}%`) : undefined,
                 },
             ],

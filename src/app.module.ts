@@ -4,6 +4,7 @@ import { envConfig } from './config';
 import { BossesModule } from './bosses/bosses.module';
 import { OrdersModule } from './orders/orders.module';
 import { CarsModule } from './cars/cars.module';
+import { FilmsModule } from './films/films.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { CarsModule } from './cars/cars.module';
         BossesModule,
         OrdersModule,
         CarsModule,
+        FilmsModule,
     ],
 })
 export class AppModule {}

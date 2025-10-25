@@ -4,6 +4,7 @@ export class PopulateCars1754133771873 implements MigrationInterface {
     name = 'PopulateCars1754133771873';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const fs = require('fs');
         const marks = fs.readFileSync('marks.txt', 'utf-8');
 

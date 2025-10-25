@@ -23,6 +23,9 @@ export class OrdersRepository {
                 boss: true,
                 carModel: true,
                 carMark: true,
+                film: {
+                    prices: true,
+                },
             },
         });
     }
@@ -43,6 +46,9 @@ export class OrdersRepository {
                 boss: true,
                 carModel: true,
                 carMark: true,
+                film: {
+                    prices: true,
+                },
             },
         });
     }
