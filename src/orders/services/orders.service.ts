@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { OrderEntity } from '../dao/order.entity';
-import { OrdersRepository } from '../repositories/orders.repository';
+import { OrderFilter, OrdersRepository } from '../repositories/orders.repository';
 import { SaveOrderDto } from '../dto/save-order.dto';
 import { BossesService } from 'src/bosses/services/bosses.service';
 import { CarsService } from 'src/cars/services/cars.service';
 import { FilmsService } from 'src/films/services/films.service';
+import { OrderLogsRepository } from '../repositories/order-logs.repository';
+import { GetOrdersDto } from '../dto/get-orders.dto';
 
 @Injectable()
 export class OrdersService {
@@ -14,6 +16,7 @@ export class OrdersService {
         private readonly bossesService: BossesService,
         private readonly carsService: CarsService,
         private readonly filmsService: FilmsService,
+        private readonly orderLogsRepository: OrderLogsRepository,
     ) {}
 
     public async get(id: string): Promise<OrderEntity> {
@@ -26,8 +29,14 @@ export class OrdersService {
         return order;
     }
 
-    public async getList(): Promise<OrderEntity[]> {
-        return this.ordersRepository.getList();
+    public async getList(query: GetOrdersDto): Promise<OrderEntity[]> {
+        const filter: OrderFilter = {
+            ...query,
+            dateFrom: query.dateFrom ? new Date(query.dateFrom) : undefined,
+            dateTo: query.dateTo ? new Date(query.dateTo) : undefined,
+        };
+
+        return this.ordersRepository.getList(filter);
     }
 
     public async save(body: SaveOrderDto): Promise<OrderEntity> {
@@ -57,6 +66,15 @@ export class OrdersService {
                 id: film?.id,
             },
         });
+
+        if (body.status) {
+            await this.orderLogsRepository.save({
+                order: {
+                    id: saved.id,
+                },
+                status: body.status,
+            });
+        }
 
         return this.get(saved.id);
     }

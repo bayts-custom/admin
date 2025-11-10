@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, FindOptionsWhere, IsNull, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, In, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 
 import { OrderEntity } from '../dao/order.entity';
+import { OrderSort } from '../enums/order-sort.enum';
+import { OrderStatus } from '../enums/order-status.enum';
 
 export interface OrderFilter {
     dateFrom?: Date;
     dateTo?: Date;
+    status?: OrderStatus[];
+    orderBy?: OrderSort;
+    order?: 'asc' | 'desc';
 }
 
 @Injectable()
@@ -26,22 +31,15 @@ export class OrdersRepository {
                 film: {
                     prices: true,
                 },
+                logs: true,
             },
         });
     }
 
     public getList(filter?: OrderFilter): Promise<OrderEntity[]> {
+        const { orderBy, order } = filter ?? {};
         return this.repository.find({
-            where: [
-                {
-                    ...this.toWhereOptions(filter),
-                    dateTo: filter?.dateFrom ? MoreThanOrEqual(filter.dateFrom) : undefined,
-                },
-                {
-                    ...this.toWhereOptions(filter),
-                    dateTo: filter?.dateFrom ? IsNull() : undefined,
-                },
-            ],
+            where: this.toWhereOptions(filter),
             relations: {
                 boss: true,
                 carModel: true,
@@ -49,7 +47,14 @@ export class OrdersRepository {
                 film: {
                     prices: true,
                 },
+                logs: true,
             },
+            order:
+                orderBy && order
+                    ? {
+                          [orderBy]: order,
+                      }
+                    : undefined,
         });
     }
 
@@ -59,7 +64,9 @@ export class OrdersRepository {
 
     private toWhereOptions(filter?: OrderFilter): FindOptionsWhere<OrderEntity> {
         return {
+            dateTo: filter?.dateFrom ? MoreThanOrEqual(filter.dateFrom) : undefined,
             dateFrom: filter?.dateTo ? LessThanOrEqual(filter?.dateTo) : undefined,
+            status: filter?.status?.length ? In(filter.status) : undefined,
         };
     }
 }
