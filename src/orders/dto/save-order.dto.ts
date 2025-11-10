@@ -1,8 +1,20 @@
 import { Expose } from 'class-transformer';
-import { IsBoolean, IsDateString, IsEnum, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import {
+    IsBoolean,
+    IsDateString,
+    IsEnum,
+    IsNumber,
+    IsOptional,
+    IsString,
+    IsUUID,
+    Length,
+    Max,
+    Min,
+} from 'class-validator';
 import { AsDate } from 'src/_decorators/as-date.transformer';
 import { WorkType } from '../enums/work-type.enum';
 import { Details } from '../enums/details.enum';
+import { OrderStatus } from '../enums/order-status.enum';
 
 export class SaveOrderDto {
     @Expose()
@@ -91,4 +103,15 @@ export class SaveOrderDto {
     @AsDate()
     @IsDateString()
     public dateTo?: string;
+
+    @Expose()
+    @IsOptional()
+    @IsEnum(OrderStatus)
+    public status?: OrderStatus;
+
+    @Expose()
+    @IsOptional()
+    @IsString()
+    @Length(7, 7)
+    public color?: string;
 }

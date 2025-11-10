@@ -8,12 +8,15 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     RelationId,
     UpdateDateColumn,
 } from 'typeorm';
 import { WorkType } from '../enums/work-type.enum';
 import { Details } from '../enums/details.enum';
+import { OrderStatus } from '../enums/order-status.enum';
+import { OrderLogEntity } from './order-log.entity';
 
 @Entity('orders')
 export class OrderEntity {
@@ -25,6 +28,19 @@ export class OrderEntity {
 
     @UpdateDateColumn()
     public updatedAt: Date;
+
+    @Column({
+        type: 'enum',
+        enum: OrderStatus,
+        default: OrderStatus.NEW,
+    })
+    public status: OrderStatus;
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
+    })
+    public color?: string;
 
     @Column({
         type: 'varchar',
@@ -148,4 +164,7 @@ export class OrderEntity {
 
     @RelationId<OrderEntity>(({ carModel }) => carModel)
     public carModelId: string;
+
+    @OneToMany(() => OrderLogEntity, (log) => log.order)
+    public logs: OrderLogEntity[];
 }
